@@ -60,15 +60,17 @@ void setup() {
 
   // Setup DMX Universe!
   dmx.init(maxDmx);
+  Serial.println("Initialized DMX!");
 }
 
 /**************** MAIN LOOP ******************/
 void loop() {
    espalexa.loop();
    delay(1);
-/*
   if(updateHouse) {
     uint8_t val = houseLights->getValue(); // Brightness out of 255, convienent for DMX!
+    Serial.print("Setting DMX House To: ");
+    Serial.println(val);
     // Start Writing to house lights
     dmx.write(201, val);
     dmx.write(203, val);
@@ -84,6 +86,8 @@ void loop() {
   }
   if(updateWork) {
     uint8_t val = workLights->getValue(); // Brightness out of 255, convienent for DMX!
+    Serial.print("Setting DMX Works To: ");
+    Serial.println(val);
     // Start Writing to work lights
     dmx.write(166, val);
     dmx.write(167, val);
@@ -97,10 +101,11 @@ void loop() {
 
   // Update the DMX Bus Once per loop
   if(updateHouse || updateWork) {
+    Serial.println("Updating DMX!");
     dmx.update(); 
   }
   updateHouse = false;
-  updateWork = false;*/
+  updateWork = false;
 }
 
 /*********** CALBACK FUNCTIONS****************/
@@ -109,7 +114,7 @@ void changeHouseLights(uint8_t br, uint32_t rgb) {
 }
 
 void changeWorkLights(uint8_t b, uint32_t rgb) {
-  updateWork = false;
+  updateWork = true;
 }
 
 /*************** WIFI STUFF **********************/
