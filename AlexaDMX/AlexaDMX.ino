@@ -3,12 +3,12 @@
 
 // ESP Alexa Libs
 #include <ESP8266WiFi.h>
-#define ESPALEXA_ASYNC
-#define ESPALEXA_DEBUG            //activate debug serial logging
+//#define ESPALEXA_ASYNC
+//#define ESPALEXA_DEBUG            //activate debug serial logging
 #include <Espalexa.h>
 
 // Max DMX Channels Being Used
-#define maxDmx 255
+#define maxDmx 300
 
 // Wifi Settings
 const char* ssid = "DMeXa";
@@ -66,16 +66,33 @@ void setup() {
 void loop() {
    espalexa.loop();
    delay(1);
-
+/*
   if(updateHouse) {
     uint8_t val = houseLights->getValue(); // Brightness out of 255, convienent for DMX!
     // Start Writing to house lights
-    dmx.write(1, val);
+    dmx.write(201, val);
+    dmx.write(203, val);
+    dmx.write(204, val);
+    dmx.write(205, val);
+    dmx.write(206, val);
+    dmx.write(207, val);
+    dmx.write(208, val);
+    dmx.write(209, val);
+    dmx.write(210, val);
+    dmx.write(213, val);
+    dmx.write(197, val);
   }
   if(updateWork) {
     uint8_t val = workLights->getValue(); // Brightness out of 255, convienent for DMX!
     // Start Writing to work lights
-    dmx.write(201, val);
+    dmx.write(166, val);
+    dmx.write(167, val);
+    dmx.write(168, val);
+    dmx.write(170, val);
+    dmx.write(171, val);
+    dmx.write(172, val);
+    dmx.write(181, val);
+    dmx.write(282, val);
   }
 
   // Update the DMX Bus Once per loop
@@ -83,7 +100,7 @@ void loop() {
     dmx.update(); 
   }
   updateHouse = false;
-  updateWork = false;
+  updateWork = false;*/
 }
 
 /*********** CALBACK FUNCTIONS****************/
