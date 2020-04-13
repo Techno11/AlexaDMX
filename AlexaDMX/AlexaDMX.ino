@@ -35,6 +35,16 @@ Espalexa espalexa;
 // DMX Object
 DMXESPSerial dmx;
 
+/************ Channel Definitions *************/
+int houseFixtures[] = {195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 213, 214};
+int workFixtures[] = {166, 167, 168, 170, 171, 172, 181, 282};
+int zone1Lights[] = {29, 36, 39, 22};
+int zone2Lights[] = {31, 41, 42, 24};
+int zone3Lights[] = {17, 19, 26, 33};
+int zone4Lights[] = {23, 30, 37, 40};
+int zone5Lights[] = {32, 13, 16, 25};
+int zone6Lights[] = {34, 18, 20, 27};
+
 /******************SETUP**********************/
 void setup() {
   // Begin Serial (we can do this because the MAX485 is on Serial1)
@@ -81,124 +91,30 @@ void setup() {
 void loop() {
    espalexa.loop();
    delay(1);
-   dmxHouseLights();
-   dmxWorkLights();
-   zone1();
-   zone2();
-   zone3();
-   zone4();
-   zone5();
-   zone6();
+   // Run Fixtures
+   runAllZones();
 
   //Update DMX
    dmx.update();
 }
 /*********** LIGHTING FUNCTIONS****************/
 
-void dmxHouseLights() {
-  uint8_t val = houseLights->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX House To: ");
-  Serial.println(val);
-  // Start Writing to house lights
-  dmx.write(195, val);
-  dmx.write(196, val);
-  dmx.write(197, val);
-  dmx.write(198, val);
-  dmx.write(199, val);
-  dmx.write(200, val);
-  dmx.write(201, val);
-  dmx.write(202, val);
-  dmx.write(203, val);
-  dmx.write(204, val);
-  dmx.write(205, val);
-  dmx.write(206, val);
-  dmx.write(207, val);
-  dmx.write(208, val);
-  dmx.write(209, val);
-  dmx.write(210, val);
-  dmx.write(213, val);
-  dmx.write(214, val);
+void runAllZones(){
+  runZone(houseLights, houseFixtures);
+  runZone(workLights, workFixtures);
+  runZone(z1, zone1Lights);
+  runZone(z2, zone2Lights);
+  runZone(z3, zone3Lights);
+  runZone(z4, zone4Lights);
+  runZone(z5, zone5Lights);
+  runZone(z6, zone6Lights);
 }
 
-void dmxWorkLights() {
-  uint8_t valW = workLights->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX Works To: ");
-  Serial.println(valW);
-  // Start Writing to work lights
-  dmx.write(166, valW);
-  dmx.write(167, valW);
-  dmx.write(168, valW);
-  dmx.write(170, valW);
-  dmx.write(171, valW);
-  dmx.write(172, valW);
-  dmx.write(181, valW);
-  dmx.write(282, valW);
-}
-
-void zone1() {
-  uint8_t val = z1->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX Z1 To: ");
-  Serial.println(val);
-  // Start Writing to work lights
-  dmx.write(29, val);
-  dmx.write(36, val);
-  dmx.write(39, val);
-  dmx.write(22, val);
-}
-
-void zone2() {
-  uint8_t val = z2->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX Z2 To: ");
-  Serial.println(val);
-  // Start Writing to work lights
-  dmx.write(31, val);
-  dmx.write(41, val);
-  dmx.write(42, val);
-  dmx.write(24, val);
-}
-
-void zone3() {
-  uint8_t val = z3->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX Z3 To: ");
-  Serial.println(val);
-  // Start Writing to work lights
-  dmx.write(17, val);
-  dmx.write(19, val);
-  dmx.write(26, val);
-  dmx.write(33, val);
-}
-
-void zone4() {
-  uint8_t val = z4->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX Z4 To: ");
-  Serial.println(val);
-  // Start Writing to work lights
-  dmx.write(23, val);
-  dmx.write(30, val);
-  dmx.write(37, val);
-  dmx.write(40, val);
-}
-
-void zone5() {
-  uint8_t val = z5->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX Z5 To: ");
-  Serial.println(val);
-  // Start Writing to work lights
-  dmx.write(32, val);
-  dmx.write(13, val);
-  dmx.write(16, val);
-  dmx.write(25, val);
-}
-
-void zone6() {
-  uint8_t val = z6->getValue(); // Brightness out of 255, convienent for DMX!
-  Serial.print("Setting DMX Z6 To: ");
-  Serial.println(val);
-  // Start Writing to work lights
-  dmx.write(34, val);
-  dmx.write(18, val);
-  dmx.write(20, val);
-  dmx.write(27, val);
+void runZone(EspalexaDevice* zoneDevice, int lights[]) {
+  uint8_t val = zoneDevice->getValue(); // Brightness out of 255
+  for(int i = 0; i < sizeof(lights); i++) {
+    dmx.write(lights[i], val);
+  }
 }
 
 /*********** CALBACK FUNCTIONS****************/
